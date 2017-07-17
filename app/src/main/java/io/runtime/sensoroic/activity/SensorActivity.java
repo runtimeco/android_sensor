@@ -220,7 +220,7 @@ public class SensorActivity extends AppCompatActivity implements OcResource.OnOb
 
             Log.d(TAG, "MynewtSensor Created:");
             Log.d(TAG, "\tkeys = " + mSensor.getSensorDataKeySet());
-            Log.d(TAG, "\tvalues = " + mSensor.getSensorDataValueList());
+            Log.d(TAG, "\tvalues = " + mSensor.getSensorDataValues());
         } else {
             mSensor.updateSensor(ocRepresentation);
         }
@@ -238,7 +238,7 @@ public class SensorActivity extends AppCompatActivity implements OcResource.OnOb
                 synchronized (SensorActivity.this) {
 
                     mSensorDataValues.clear();
-                    mSensorDataValues.addAll(mSensor.getSensorDataValueList());
+                    mSensorDataValues.addAll(mSensor.getSensorDataValues());
 
                     LineData data = mChart.getData();
                     if (data != null) {

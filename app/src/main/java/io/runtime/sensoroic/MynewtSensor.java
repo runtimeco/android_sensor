@@ -11,6 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The Mynewt Sensor is a wrapper for an OcRepresentation of valid Mynewt sensor exposed using the
+ * sensor framework and is used primarily for charting sensor values. The class also contains a
+ * few useful utility functions for determinig whether an OcResource is a Mynewt sensor. Finally,
+ * this class contains the constants for all Mynewt sensor resource types and human readable names.
+ */
 public class MynewtSensor {
 
     /* Logging tag */
@@ -105,6 +111,14 @@ public class MynewtSensor {
     }
 
     /**
+     * Get an unordered map of the most recent sensor data, including time values.
+     * @return unordered map of sensor data
+     */
+    public Map<String, Object> getValues() {
+        return mValues;
+    }
+
+    /**
      * Get an ordered map of the most recent sensor data, excluding time values.
      * @return ordered map of sensor data
      */
@@ -113,15 +127,7 @@ public class MynewtSensor {
     }
 
     /**
-     * Get an unordered map of the most recent sensor data, including time values.
-     * @return unordered map of sensor data
-     */
-    public Map<String, Object> getValues() {
-        return mSensorData;
-    }
-
-    /**
-     * Get an ordered List of sensor data keys which matches getSensorDataValueList().
+     * Get an ordered List of sensor data keys which matches getSensorDataValues().
      * The sensor data keys exclude time keys.
      * @return ordered List of sensor data keys, excluding time keys.
      */
@@ -134,7 +140,7 @@ public class MynewtSensor {
      * The sensor data values exclude time values.
      * @return ordered List of sensor data values, excluding time values.
      */
-    public Collection<Object> getSensorDataValueList() {
+    public Collection<Object> getSensorDataValues() {
         return mSensorData.values();
     }
 
@@ -156,7 +162,7 @@ public class MynewtSensor {
     }
 
     /**
-     *
+     * Get the most recent number of system ticks since the board started running
      * @return
      */
     public int getCpuTime() {
@@ -258,7 +264,7 @@ public class MynewtSensor {
 
     /**
      * Get the data values from list of values and a sensor type. This method determines the order
-     * in which the sensor data values are listed and does not include any time values from the
+     * in which the sensor data values are listed and does not return any time values from the
      * original values list.
      * @param values a map of sensor values
      * @param sensorType the sensor resource type corresponding to the list of values
@@ -303,7 +309,7 @@ public class MynewtSensor {
                 returnValues.put("r", values.get("r"));
                 returnValues.put("g", values.get("g"));
                 returnValues.put("b", values.get("b"));
-//                returnValues.put("c", values.get("c"));
+                returnValues.put("c", values.get("c"));
                 returnValues.put("lux", values.get("lux"));
                 returnValues.put("ir", values.get("ir"));
                 returnValues.put("colortemp", values.get("colortemp"));
