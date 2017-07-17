@@ -174,7 +174,7 @@ public class SensorActivity extends AppCompatActivity implements OcResource.OnOb
         XAxis xl = mChart.getXAxis();
         xl.setDrawGridLines(false);
         xl.setAvoidFirstLastClipping(true);
-        xl.setDrawLabels(true);
+        xl.setDrawLabels(false);
         xl.setEnabled(true);
 
         YAxis leftAxis = mChart.getAxisLeft();
@@ -213,6 +213,7 @@ public class SensorActivity extends AppCompatActivity implements OcResource.OnOb
     public synchronized void onObserveCompleted(List<OcHeaderOption> list, OcRepresentation ocRepresentation, int i) {
         // If we have not yet received an Observe response, create a new MynewtSensor object.
         // Otherwise update the data values inside the MynewtSensor object.
+
         if (mSensor == null) {
             mSensor = new MynewtSensor(ocRepresentation, mResourceType);
             mSensorDataKeys = new ArrayList<>(mSensor.getSensorDataKeySet());
@@ -224,7 +225,9 @@ public class SensorActivity extends AppCompatActivity implements OcResource.OnOb
             mSensor.updateSensor(ocRepresentation);
         }
         Log.d(TAG, "Observe completed - values = " + ocRepresentation.getValues());
-
+        if (!mIsObserving) {
+            return;
+        }
         mCurrentX++;
 
         runOnUiThread(new Runnable() {
