@@ -78,6 +78,13 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
     // BLE device address whitelist
     private ArrayList<String> mWhiteList;
 
+    /**
+     * General multicast resource discovery constructor for DiscoveryTask. This DiscoveryTask will
+     * discover all OIC enabled devices over BLE and IP transport
+     *
+     * @param context   context
+     * @param listener  the OnDiscoveryListener for discovery callbacks
+     */
     public DiscoveryTask(Context context, OnDiscoveryListener listener) {
         mContext = context;
         mApp = (OicApplication) context.getApplicationContext();
@@ -86,6 +93,16 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
         mDiscoverIp = true;
     }
 
+    /**
+     * Multicast resoruce discovery constructor for DiscoveryTask. This DiscoveryTask will publish
+     * progress updates to the given ProgressDialog's message TextView.
+     *
+     * @param context           context
+     * @param listener          the OnDiscoveryListener for discovery callbacks
+     * @param discoverBle       whether or not to discover devices over BLE transport
+     * @param discoverIp        whether or not to discover devices over IP transport
+     * @param progressdialog    the progress dialog to publish progress to
+     */
     public DiscoveryTask(Context context, OnDiscoveryListener listener, boolean discoverBle,
                          boolean discoverIp, ProgressDialog progressdialog) {
         mContext = context;
@@ -96,6 +113,17 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
         mDiscoverIp = discoverIp;
     }
 
+    /**
+     * Unicast BLE, Multicast IP  resource discovery constructor for DiscoveryTask. This
+     * DiscoveryTask will multicast discovery IP devices and only discover BLE devices for hosts
+     * in the whitelist.
+     *
+     * @param context       context
+     * @param listener      the OnDiscoveryListener for discovery callbacks
+     * @param discoverBle   whether or not to discover devices over BLE transport
+     * @param discoverIp    whether or not to discover devices over IP transport
+     * @param bleWhitelist  the list of BLE host addresses to do resource discovery on
+     */
     public DiscoveryTask(Context context, OnDiscoveryListener listener, boolean discoverBle,
                          boolean discoverIp, List<String> bleWhitelist) {
         mContext = context;
@@ -106,6 +134,19 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
         mDiscoverIp = discoverIp;
     }
 
+    /**
+     * Unicast BLE, Multicast IP  resource discovery constructor for DiscoveryTask. This
+     * DiscoveryTask will publish progress updates to the given ProgressDialog's message TextView.
+     * This DiscoveryTask will multicast discovery IP devices and only discover BLE devices for
+     * hosts in the whitelist.
+     *
+     * @param context           context
+     * @param listener          the OnDiscoveryListener for discovery callbacks
+     * @param discoverBle       whether or not to discover devices over BLE transport
+     * @param discoverIp        whether or not to discover devices over IP transport
+     * @param progressdialog    the progress dialog to publish progress to
+     * @param bleWhitelist      the list of BLE host addresses to do resource discovery on
+     */
     public DiscoveryTask(Context context, OnDiscoveryListener listener, boolean discoverBle,
                          boolean discoverIp, ProgressDialog progressdialog, List<String> bleWhitelist) {
         mContext = context;
