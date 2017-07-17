@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#425680</color>
+    <color name="colorPrimaryDark">#425680</color>
+    <!--<color name="colorPrimary">#003D66</color>-->
+    <!--<color name="colorPrimaryDark">#003D66</color>-->
+    <color name="colorAccent">#E77E3B</color>
+    <!--<color name="colorAccent">#00ABA8</color>-->
+    <color name="red">#E73C3B</color>
+    <color name="green">#41E73B</color>
+    <color name="blue">#3B6CE7</color>
+    <color name="yellow">#E7E23B</color>
+    <color name="orange">#E77E3B</color>
+    <color name="pink">#d217b6</color>
+    <color name="dark_yellow">#99991e</color>
+    <color name="teal">#40977f</color>
+    <color name="dark_purple">#634280</color>
+    <color name="brown">#806342</color>
+    <!-- Progress Colors -->
+    <array name="colors">
+        <item>@color/red</item>
+        <item>@color/green</item>
+        <item>@color/blue</item>
+        <item>@color/yellow</item>
+        <item>@color/orange</item>
+        <item>@color/pink</item>
+        <item>@color/dark_yellow</item>
+        <item>@color/teal</item>
+        <item>@color/dark_purple</item>
+        <item>@color/brown</item>
+    </array>
+</resources>

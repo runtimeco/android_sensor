@@ -1,0 +1,56 @@
+<resources>
+    <!-- App Name -->
+    <string name="app_name">Mynewt OIC</string>
+
+    <!-- Titles -->
+    <string name="device_activity_title">Mynewt OIC</string>
+    <string name="sensor_list_title">Sensors</string>
+    <string name="smart_device_list_title">Smart Devices</string>
+    <string name="on_off_title">On/Off</string>
+    <string name="brightness_title">Brightness</string>
+    <string name="units_title">Units</string>
+    <string name="temperature_title">Temperature</string>
+    <string name="humidity_title">Humidity</string>
+    <string name="pressure_title">Pressure</string>
+    <string name="sensor_value_list_title">Sensor Values</string>
+    <string name="x_title">X</string>
+    <string name="y_title">Y</string>
+    <string name="z_title">Z</string>
+    <string name="ir_title">IR</string>
+    <string name="full_title">Full</string>
+    <string name="lux_title">Lux</string>
+    <string name="red_title">Red</string>
+    <string name="blue_title">Blue</string>
+    <string name="green_title">Green</string>
+    <string name="smart_devices_list_empty">No Smart Devices. Discover Devices to find nearby smart devices.</string>
+    <string name="sensors_list_empty">No Sensors Found. Discover Devices to find nearby sensors.</string>
+
+
+    <string name="degrees_celcius">°C</string>
+    <string name="degrees_fahrenheight">°F</string>
+    <string name="min_degrees_fahrenheight">32°</string>
+    <string name="max_degrees_fahrenheight">140°</string>
+    <string name="min_degrees_celcius">0°</string>
+    <string name="max_degrees_celcius">40°</string>
+    <string name="min_percent_humidity">0%</string>
+    <string name="max_percent_humidity">100%</string>
+
+    <!-- Menu -->
+    <string name="menu_discover">Discover</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_help">Help</string>
+
+    <!-- Sensor Menu -->
+    <string name="stop_observe">Stop Observing</string>
+    <string name="start_observe">Start Observing</string>
+
+    <!-- Scan Progress -->
+    <string name="scan_progress_ble_scan">Scanning for OIC enabled Bluetooth LE Devices…</string>
+    <string name="scan_progress_ble_discovery">Discovering OIC devices found by Bluetooth LE scan…</string>
+    <string name="scan_progress_ble_discovery_whitelist">Discovering OIC devices from whitelist…</string>
+    <string name="scan_progress_ip_discovery">Discovering OIC enabled devices using IP…</string>
+
+    <!-- Standard OIC Resource type names -->
+    <string name="binary_switch">Light</string>
+    <string name="led_subtitle">LED</string>
+</resources>
