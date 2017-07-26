@@ -339,7 +339,7 @@ public class MynewtSensor {
                 returnValues.put("w", values.get("w"));
                 break;
             default:
-                break;
+                return new LinkedHashMap<>(values);
         }
         return returnValues;
     }

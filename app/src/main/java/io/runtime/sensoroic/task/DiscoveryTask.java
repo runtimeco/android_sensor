@@ -2,6 +2,8 @@ package io.runtime.sensoroic.task;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
@@ -23,6 +25,7 @@ import org.iotivity.base.PlatformConfig;
 import org.iotivity.base.QualityOfService;
 import org.iotivity.base.ServiceType;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -77,6 +80,10 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
 
     // BLE device address whitelist
     private ArrayList<String> mWhiteList;
+
+    // Whether or not the BLE cache has been cleared
+    private boolean mCacheCleared = false;
+
 
     /**
      * General multicast resource discovery constructor for DiscoveryTask. This DiscoveryTask will
@@ -195,13 +202,17 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
 
     @Override
     protected synchronized Void doInBackground(Void... param) {
+
+
         //Scan for Ble Devices and wait for 10 seconds
         try {
-            if (mWhiteList == null) {
+//            connectAndClearCache(mWhiteList.get(0));
+//            wait();
+            if (mWhiteList == null && mDiscoverBle) {
                 publishProgress(R.string.scan_progress_ble_scan);
                 scanBleDevices();
                 wait();
-            } else {
+            } else if (mDiscoverBle) {
                 mScannedHosts.addAll(mWhiteList);
             }
             if (mDiscoverBle) {
@@ -326,6 +337,16 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
             if (!mScannedHosts.contains(addr)) {
                 mScannedHosts.add(addr);
             }
+            if (!mCacheCleared) {
+                mCacheCleared = true;
+                result.getDevice().connectGatt(mContext, false, new BluetoothGattCallback() {
+                    @Override
+                    public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+                        super.onConnectionStateChange(gatt, status, newState);
+                        refreshDeviceCache(gatt);
+                    }
+                });
+            }
         }
     };
 
@@ -339,6 +360,7 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
             return;
         }
         Log.d(TAG, "Resource found: " + ocResource.getHost() + ocResource.getUri());
+        Log.d(TAG, "\t Resource Types: " + ocResource.getResourceTypes());
         // Add the resource to the list of discovered resources
         mDiscoveredResources.add(ocResource);
 
@@ -367,5 +389,53 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
          * Called when no resources were found from DiscoveryTask
          */
         void OnDiscoveryFailed();
+    }
+
+    //Connects to the device and clears the BLE cache
+    private void connectAndClearCache(final String address) {
+        mBluetoothLeScanner.startScan(mBleScanFilters, mBleScanSettings, new ScanCallback() {
+            @Override
+            public void onScanResult(int callbackType, ScanResult result) {
+                Log.d(TAG, "Scanned device: " + result.getDevice().getName() + ", " + result.getDevice().getAddress());
+                if (!result.getDevice().getAddress().equals(address)) {
+                    return;
+                }
+                Log.d(TAG, "Scanned Device");
+                super.onScanResult(callbackType, result);
+                mBluetoothLeScanner.stopScan(mScanCallback);
+                result.getDevice().connectGatt(mContext, false, new BluetoothGattCallback() {
+                    @Override
+                    public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+                        super.onConnectionStateChange(gatt, status, newState);
+                        if (newState != 2) {
+                            return;
+                        }
+                        Log.d(TAG, "Gatt connection state: " + newState);
+                        refreshDeviceCache(gatt);
+                        Log.d(TAG, "refreshed device cache");
+                        gatt.disconnect();
+                        Log.d(TAG, "disconnected gatt");
+                        synchronized (DiscoveryTask.this) {
+                            DiscoveryTask.this.notify();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private boolean refreshDeviceCache(BluetoothGatt gatt){
+        try {
+            BluetoothGatt localBluetoothGatt = gatt;
+            Method localMethod = localBluetoothGatt.getClass().getMethod("refresh", new Class[0]);
+            if (localMethod != null) {
+                boolean bool = ((Boolean) localMethod.invoke(localBluetoothGatt, new Object[0])).booleanValue();
+                return bool;
+            }
+        }
+        catch (Exception localException) {
+            Log.e(TAG, "An exception occured while refreshing device");
+        }
+        return false;
     }
 }

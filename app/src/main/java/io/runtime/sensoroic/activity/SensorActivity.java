@@ -96,6 +96,10 @@ public class SensorActivity extends AppCompatActivity implements OcResource.OnOb
         // Get the sensor resource type
         mResourceType = MynewtSensor.getSensorResourceType(mResource.getResourceTypes());
 
+        if (mResourceType == null) {
+            mResourceType = mResource.getResourceTypes().get(0);
+        }
+
         // Set up Views
         mSensorValueListView = (ListView) findViewById(R.id.sensor_value_list);
 
