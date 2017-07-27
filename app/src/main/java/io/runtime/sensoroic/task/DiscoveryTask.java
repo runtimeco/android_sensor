@@ -200,19 +200,29 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
         OcPlatform.Configure(platformConfig);
     }
 
+
+    /**
+     * This is the main work method for DiscoveryTask. There are three sections in this method:
+     *   - BLE Scan: If the whitelist is not null, scan nearby BLE devices which advertise the
+     *               Iotivity UUID.
+     *   - BLE Discovery: If the mDiscoverBle flag is enabled, discover BLE devices from the
+     *                    list of scanned devices or the whitelist.
+     *   - IP Discovery: If the mDiscoverIp flag is enabled, discover IP devices.
+     * @param param void
+     * @return void
+     */
     @Override
     protected synchronized Void doInBackground(Void... param) {
-
-
         //Scan for Ble Devices and wait for 10 seconds
         try {
-//            connectAndClearCache(mWhiteList.get(0));
-//            wait();
             if (mWhiteList == null && mDiscoverBle) {
                 publishProgress(R.string.scan_progress_ble_scan);
+                // Scan for BLE devices advertising the Iotivity UUID
                 scanBleDevices();
-                wait();
             } else if (mDiscoverBle) {
+                // Uncomment to clear BLE cache for the first device in the whitelist
+                //connectAndClearCache(mWhiteList.get(0));
+                //wait();
                 mScannedHosts.addAll(mWhiteList);
             }
             if (mDiscoverBle) {
@@ -221,10 +231,12 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
                 } else {
                     publishProgress(R.string.scan_progress_ble_discovery_whitelist);
                 }
+                // Discover BLE devices
                 discoverBle();
             }
             if (mDiscoverIp) {
                 publishProgress(R.string.scan_progress_ip_discovery);
+                // Discover IP devices
                 discoverIp();
             }
         } catch (InterruptedException e) {
@@ -283,6 +295,7 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
             }
         }, BLE_SCAN_DURATION_MILLIS);
         mBluetoothLeScanner.startScan(mBleScanFilters, mBleScanSettings, mScanCallback);
+        wait();
     }
 
     /**
