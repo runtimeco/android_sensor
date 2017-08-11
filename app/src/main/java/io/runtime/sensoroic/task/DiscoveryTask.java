@@ -2,6 +2,7 @@ package io.runtime.sensoroic.task;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothManager;
@@ -68,7 +69,7 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
     // Scan constants
     private static final int BLE_SCAN_DURATION = 10;
     private static final int BLE_SCAN_DURATION_MILLIS = BLE_SCAN_DURATION * 1000;
-    private static final int DISCOVERY_DURATION = 15;
+    private static final int DISCOVERY_DURATION = 10;
     private static final int DISCOVERY_DURATION_MILLIS = DISCOVERY_DURATION * 1000;
 
     // List of found OIC Bluetooth LE Hosts
@@ -221,8 +222,8 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
                 scanBleDevices();
             } else if (mDiscoverBle) {
                 // Uncomment to clear BLE cache for the first device in the whitelist
-                //connectAndClearCache(mWhiteList.get(0));
-                //wait();
+//                connectAndClearCache(mWhiteList.get(0));
+//                wait();
                 mScannedHosts.addAll(mWhiteList);
             }
             if (mDiscoverBle) {
@@ -331,7 +332,7 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
                 OcPlatform.WELL_KNOWN_QUERY,
                 EnumSet.of(OcConnectivityType.CT_ADAPTER_IP),
                 this, QualityOfService.LOW);
-        wait(DISCOVERY_DURATION_MILLIS);
+        wait(5000);
     }
 
     //********************************************************
@@ -350,18 +351,17 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
             if (!mScannedHosts.contains(addr)) {
                 mScannedHosts.add(addr);
             }
-            if (!mCacheCleared) {
-                mCacheCleared = true;
-                result.getDevice().connectGatt(mContext, false, new BluetoothGattCallback() {
-                    @Override
-                    public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-                        super.onConnectionStateChange(gatt, status, newState);
-                        refreshDeviceCache(gatt);
-                    }
-                });
-            }
         }
     };
+
+    private BluetoothAdapter.LeScanCallback mLeScanCallback =
+            new BluetoothAdapter.LeScanCallback() {
+                @Override
+                public void onLeScan(final BluetoothDevice device, int rssi,
+                                     byte[] scanRecord) {
+                    Log.i("onLeScan", device.toString());
+                }
+            };
 
     /*
      * Callback from the Iotivity library when a resource has been found
@@ -374,6 +374,8 @@ public class DiscoveryTask extends AsyncTask<Void, Integer, Void> implements OcP
         }
         Log.d(TAG, "Resource found: " + ocResource.getHost() + ocResource.getUri());
         Log.d(TAG, "\t Resource Types: " + ocResource.getResourceTypes());
+        Log.d(TAG, "\t Connectivity Types: " + ocResource.getConnectivityTypeSet());
+
         // Add the resource to the list of discovered resources
         mDiscoveredResources.add(ocResource);
 

@@ -169,7 +169,7 @@ public class DeviceActivity extends AppCompatActivity implements DiscoveryTask.O
     }
 
     /**
-     * Displays the discover dialog, starts the discovery task, and starts the waiting thread.
+     * Starts the discovery task
      */
     private void discover() {
         // Example of using a whitelist to discover a single, known ble device.
@@ -235,7 +235,6 @@ public class DeviceActivity extends AppCompatActivity implements DiscoveryTask.O
                 .create().show();
         // Dismiss the discovery dialog
         mDiscoveryDialog.dismiss();
-
     }
 
     /**

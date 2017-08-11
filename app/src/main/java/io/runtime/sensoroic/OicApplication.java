@@ -8,7 +8,6 @@ import org.iotivity.base.OcResource;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Set;
 
 public class OicApplication extends Application {
 

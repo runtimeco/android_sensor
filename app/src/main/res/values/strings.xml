@@ -1,9 +1,9 @@
 <resources>
     <!-- App Name -->
-    <string name="app_name">Mynewt OIC</string>
+    <string name="app_name">Sensors</string>
 
     <!-- Titles -->
-    <string name="device_activity_title">Mynewt OIC</string>
+    <string name="device_activity_title">Mynewt Sensors</string>
     <string name="sensor_list_title">Sensors</string>
     <string name="smart_device_list_title">Smart Devices</string>
     <string name="on_off_title">On/Off</string>
