@@ -251,9 +251,20 @@ public class SensorActivity extends AppCompatActivity implements OcResource.OnOb
                             // If there is no data yet, create the data sets
                             createDataSets(data);
                         }
+
                         // Add the new data entries
                         for (int i = 0; i < mSensor.getSensorDataCount(); i++) {
-                            double val = (Double) mSensorDataValues.get(i);
+                            double val = 0;
+                            if (mSensorDataValues.get(i) instanceof Integer) {
+                                // Make the cast to Integer
+                                val = (Integer) mSensorDataValues.get(i);
+                            } else if (mSensorDataValues.get(i) instanceof Double) {
+                                // Make the cast to Double
+                                val = (Double) mSensorDataValues.get(i);
+                            } else {
+                                Log.e(TAG, "Could not cast value to double");
+                                continue;
+                            }
                             data.addEntry(new Entry(mCurrentX, (float) val), i);
                         }
                         data.notifyDataChanged();
